@@ -26,6 +26,7 @@ sys.path.append(dirname(__file__))
 
 # pylint: disable=wrong-import-position
 from provider.aws.command import aws_main
+from provider.az.command import az_main
 from shared.parameters import generate_parser
 
 
@@ -56,11 +57,11 @@ def main():
         return
 
     args = parser.parse_args()
-
-    if args.language is None or args.language not in AVAILABLE_LANGUAGES:
-        language = "en_US"
-    else:
-        language = args.language
+    
+#    if args.language is None or args.language not in AVAILABLE_LANGUAGES:
+#        language = "en_US"
+#    else:
+#        language = args.language
 
     # Diagram check
     if "diagram" not in args:
@@ -69,11 +70,11 @@ def main():
         diagram = args.diagram
 
     # defining default language to show messages
-    defaultlanguage = gettext.translation(
-        "messages", localedir=dirname(__file__) + "/locales", languages=[language]
-    )
-    defaultlanguage.install()
-    _ = defaultlanguage.gettext
+    #defaultlanguage = gettext.translation(
+    #    "messages", localedir=dirname(__file__) + "/locales", languages=[language]
+    #)
+    #defaultlanguage.install()
+    #_ = defaultlanguage.gettext
 
     # diagram version check
     check_diagram_version(diagram)
@@ -86,6 +87,8 @@ def main():
 
     if args.command.startswith("aws"):
         command = aws_main(args)
+    elif args.command.startswith("az"):
+        command = az_main(args)
     else:
         raise NotImplementedError("Unknown command")
 
@@ -94,7 +97,10 @@ def main():
     else:
         services = []
 
-    command.run(diagram, args.verbose, services, filters)
+    if args.command.startswith("aws"):
+        command.run(diagram, args.verbose, services, filters)
+    else:
+        print(args)
 
 
 def check_diagram_version(diagram):

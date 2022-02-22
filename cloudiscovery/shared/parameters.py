@@ -47,6 +47,7 @@ def generate_parser():
     aws_all_parser = aws_subparser.add_parser("all", help="aws all help")
     add_default_arguments(aws_all_parser, diagram_enabled=False)
     add_services_argument(aws_all_parser)
+
     aws_limit_parser = aws_subparser.add_parser("limit", help="aws limit help")
     add_default_arguments(
         aws_limit_parser, diagram_enabled=False, filters_enabled=False
@@ -82,11 +83,11 @@ def generate_parser():
     add_default_arguments(az_all_parser, diagram_enabled=False)
     add_services_argument(az_all_parser)
 
-    az_vpc_parser = az_subparser.add_parser("vpc", help="az vpc help")
-    add_default_arguments(az_vpc_parser)
-    az_vpc_parser.add_argument(
+    az_vnet_parser = az_subparser.add_parser("vnet", help="az network help")
+    add_default_arguments(az_vnet_parser)
+    az_vnet_parser.add_argument(
         "-v",
-        "--vpc-id",
+        "--vnet-name",
         required=False,
         help="Inform VPC to analyze. If not informed, script will check all vpcs.",
     )
